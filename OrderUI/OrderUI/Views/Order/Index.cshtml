@@ -1,0 +1,19 @@
+﻿@model OrderUI.Models.OrderModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+@using (Html.BeginForm("Create", "Order", FormMethod.Post))
+{
+    @Html.LabelFor(m => m.OrderName)
+    @Html.TextBoxFor(m => m.OrderName)
+
+    @Html.LabelFor(m => m.OrderPrice)
+    @Html.TextBoxFor(m => m.OrderPrice)
+
+    <input id="orderButton" type="submit" value="Order" />
+}
