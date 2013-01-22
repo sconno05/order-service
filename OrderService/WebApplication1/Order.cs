@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication1
+namespace OrderService
 {
     [RestService("orders")]
+    [Serializable]
     public class Order
     {
         //TODO: Consider an ID
