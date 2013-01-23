@@ -10,6 +10,8 @@ namespace OrderService
 {
     public class OrderService : RestServiceBase<Order>
     {
+        private const string ORDER_QUEUE_PATH = @".\private$\Orders"; // TODO: What is the .\ doing?
+
         public override object OnGet(Order request)
         {
             throw new NotImplementedException();
@@ -17,8 +19,7 @@ namespace OrderService
 
         public override object OnPost(Order request)
         {
-            MessageQueue orderQueue = new MessageQueue();
-            orderQueue.Path = @".\private$\Orders"; // TODO: What is the .\ doing?
+            MessageQueue orderQueue = new MessageQueue(ORDER_QUEUE_PATH, QueueAccessMode.Send);
 
             if (!MessageQueue.Exists(orderQueue.Path))
             {
