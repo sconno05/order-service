@@ -64,12 +64,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OrderDto.cs" />
+    <Compile Include="Migrations\201301240300570_InitialCreate.cs" />
+    <Compile Include="Migrations\201301240300570_InitialCreate.Designer.cs">
+      <DependentUpon>201301240300570_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201301240311180_First.cs" />
+    <Compile Include="Migrations\201301240311180_First.Designer.cs">
+      <DependentUpon>201301240311180_First.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="OrderContext.cs" />
+    <Compile Include="Order.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +108,14 @@
       <ProductName>SQL Server Compact 4.0 SP1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201301240300570_InitialCreate.resx">
+      <DependentUpon>201301240300570_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201301240311180_First.resx">
+      <DependentUpon>201301240311180_First.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

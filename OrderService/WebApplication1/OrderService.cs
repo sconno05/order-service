@@ -11,7 +11,7 @@ namespace OrderService
 {
     public class OrderService : RestServiceBase<Order>
     {
-        private const string ORDER_QUEUE_PATH = @".\private$\Orders"; // TODO: What is the .\ doing?
+        private const string ORDER_QUEUE_PATH = @".\private$\Orders";
 
         public override object OnGet(Order request)
         {

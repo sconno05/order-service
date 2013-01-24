@@ -18,8 +18,6 @@ namespace OrderProcessingService
             _orderQueue.PeekCompleted += _orderQueue_PeekCompleted;
             _orderQueue.BeginPeek();
             Console.ReadLine();
-
-            // TODO: Figure out what to do on close
         }
 
         static void _orderQueue_PeekCompleted(object sender, PeekCompletedEventArgs e)
@@ -29,16 +27,20 @@ namespace OrderProcessingService
             var transaction = new MessageQueueTransaction();
             transaction.Begin();
 
-            OrderDto order;
+            Order order;
 
             try
             {
                 var receivedMessage = orderQueue.Receive(transaction);
                 receivedMessage.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
 
-                order = OrderDto.DeserializeXml(receivedMessage.Body.ToString());
-                
-                // TODO: Save to a DB
+                order = Order.DeserializeXml(receivedMessage.Body.ToString());
+
+                using (var db = new OrderContext())
+                {
+                    db.Orders.Add(order);
+                    db.SaveChanges();
+                }
 
                 transaction.Commit();
             }
