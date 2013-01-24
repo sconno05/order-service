@@ -15,31 +15,43 @@ namespace OrderProcessingService
         static void Main(string[] args)
         {
             _orderQueue = new MessageQueue(ORDER_QUEUE_PATH, QueueAccessMode.Receive);
-            _orderQueue.ReceiveCompleted += _orderQueue_ReceiveCompleted;
-            _orderQueue.BeginReceive();
+            _orderQueue.PeekCompleted += _orderQueue_PeekCompleted;
+            _orderQueue.BeginPeek();
+            Console.ReadLine();
 
             // TODO: Figure out what to do on close
         }
 
-        static void _orderQueue_ReceiveCompleted(object sender, ReceiveCompletedEventArgs e)
+        static void _orderQueue_PeekCompleted(object sender, PeekCompletedEventArgs e)
         {
-            MessageQueue orderQueue = (MessageQueue)sender;
+            var orderQueue = (MessageQueue)sender;
 
-            Order order;
+            var transaction = new MessageQueueTransaction();
+            transaction.Begin();
+
+            OrderDto order;
 
             try
             {
-                Message receivedMessage = orderQueue.EndReceive(e.AsyncResult);
-                order = Order.DeserializeXml(receivedMessage.Body.ToString());
+                var receivedMessage = orderQueue.Receive(transaction);
+                receivedMessage.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
+
+                order = OrderDto.DeserializeXml(receivedMessage.Body.ToString());
+                
+                // TODO: Save to a DB
+
+                transaction.Commit();
             }
-            catch (Exception exception)
+            catch
             {
-                // TODO: Log this somewhere.
-                Console.WriteLine(exception);
+                // TODO: Log something
+                transaction.Abort();
+            }
+            finally
+            {
+                orderQueue.BeginPeek();
             }
 
-            orderQueue.Refresh();
-            orderQueue.BeginPeek();
         }
     }
 }
